@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+  <title>ここはどこでしょう？</title>
+</head>
+<body>
+  <div class="main">
+    <h1>ここはどこでしょう？</h1>
+    <ul class="output"></ul>
+    <a id="btn" class="hint_btn" href="">more hints!!!</a>
+    <p>写真が撮られた場所を答えてみてちょ</p>
+    <input type="text" class="answer_box">
+    <a id="btn" class="answer_btn" href="">this is my answer.</a>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- <script src="https://api.flickr.com/services/rest/?api_key=21de068278835cfb26048687442c9362"></script> -->
+
+  <script>
+    const url ='https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=21de068278835cfb26048687442c9362&tags=malawi&format=json&nojsoncallback=1';
+
+    $('.hint_btn').on('click', function() {
+      axios.get(url, function(flickrResponse) {
+        console.log(flickrResponse);
+        flickrResponse.items.forEach(function(photo) {
+          const img = $('<img>');
+          img.attr('src', photo.media.m);
+          $('#output').append(img);
+        });
+      });
+    });
+
+    // $('#btn').on('click', function() {
+    //   axios.get(url)
+    //   .then(function(response) {
+    //     console.log(response)
+        // console.log(response.data.items[0].volumeInfo.title);
+        // const bookData = [];
+        // response.data.items.forEach(function(elm) {
+        //   bookData.push(`<p>${elm.volumeInfo.title}</p>`);
+      // })
+
+        // $('#output').html(bookData);
+
+    //   }).catch(function(error) {
+    //     console.log(error);
+    //   }).finally(function() {
+    //     console.log('done!');
+    //   });
+    // });
+  </script>
+
+</body>
+</html>
