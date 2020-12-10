@@ -11,48 +11,43 @@
   <div class="main">
     <h1>ここはどこでしょう？</h1>
     <ul class="output"></ul>
-    <a id="btn" class="hint_btn" href="">more hints!!!</a>
+    <!-- <a id="btn" class="hint_btn" href="">写真を追加</a> -->
     <p>写真が撮られた場所を答えてみてちょ</p>
     <input type="text" class="answer_box">
-    <a id="btn" class="answer_btn" href="">this is my answer.</a>
+    <a id="btn" class="answer_btn" href="">送信</a>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- axiosライブラリの読み込み -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <!-- <script src="https://api.flickr.com/services/rest/?api_key=21de068278835cfb26048687442c9362"></script> -->
 
   <script>
+    // リクエスト送信のurl
+    // Flickr内の写真の中から[malawi]とタグ付けされた写真を引っぱり出す
     const url ='https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=21de068278835cfb26048687442c9362&tags=malawi&format=json&nojsoncallback=1';
+    
+    // 必要なデータ（写真）を取得
+    // 授業の内容をベースにコードを書いたけど、写真が表示されない
+    // コンソールは取れているので、あとは必要な情報を探して表記するところまで作業を進めたい
+    $(document).ready(function() {
+      axios.get(url)
+      .then(function(response) {
+        console.log(response)
+        console.log(response.data.photos)
+        const photoData = [];
+        response.data.photos.forEach(function(photo) {
+          photoData.push(`<img src=${photo.media.m}>`);
+        })
 
-    $('.hint_btn').on('click', function() {
-      axios.get(url, function(flickrResponse) {
-        console.log(flickrResponse);
-        flickrResponse.items.forEach(function(photo) {
-          const img = $('<img>');
-          img.attr('src', photo.media.m);
-          $('#output').append(img);
-        });
+        $('#output').append(photoData);
+
+      }).catch(function(error) {
+        console.log(error);
+      }).finally(function() {
+        console.log('done!');
       });
     });
 
-    // $('#btn').on('click', function() {
-    //   axios.get(url)
-    //   .then(function(response) {
-    //     console.log(response)
-        // console.log(response.data.items[0].volumeInfo.title);
-        // const bookData = [];
-        // response.data.items.forEach(function(elm) {
-        //   bookData.push(`<p>${elm.volumeInfo.title}</p>`);
-      // })
-
-        // $('#output').html(bookData);
-
-    //   }).catch(function(error) {
-    //     console.log(error);
-    //   }).finally(function() {
-    //     console.log('done!');
-    //   });
-    // });
   </script>
 
 </body>
