@@ -10,8 +10,8 @@
 <body>
   <div class="main">
     <h1>ここはどこでしょう？</h1>
-    <ul class="output"></ul>
-    <!-- <a id="btn" class="hint_btn" href="">写真を追加</a> -->
+    <!-- ここに[kuchawe]とタグづけされた写真を表示 -->
+    <ul id="output"></ul>
     <p>写真が撮られた場所を答えてみてちょ</p>
     <input type="text" class="answer_box">
     <a id="btn" class="answer_btn" href="">送信</a>
@@ -23,29 +23,44 @@
 
   <script>
     // リクエスト送信のurl
-    // Flickr内の写真の中から[malawi]とタグ付けされた写真を引っぱり出す
-    const url ='https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=21de068278835cfb26048687442c9362&tags=malawi&format=json&nojsoncallback=1';
+    // Flickr内の写真の中から[kuchawe]とタグ付けされた写真を引っぱり出す
+    const url ='https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=21de068278835cfb26048687442c9362&tags=kuchawe&format=json&nojsoncallback=1';
     
     // 必要なデータ（写真）を取得
-    // 授業の内容をベースにコードを書いたけど、写真が表示されない
-    // コンソールは取れているので、あとは必要な情報を探して表記するところまで作業を進めたい
+    // 授業の内容をベースにコードを書いて写真を表示
+    // コンソールは取れているので、必要な情報を探して表記した（めっちゃ苦労した・・）
     $(document).ready(function() {
       axios.get(url)
       .then(function(response) {
         console.log(response)
         console.log(response.data.photos)
+        console.log(response.data.photos.photo[0].id);
         const photoData = [];
-        response.data.photos.forEach(function(photo) {
-          photoData.push(`<img src=${photo.media.m}>`);
+        response.data.photos.photo.forEach(function(elm) {
+          photoData.push(`<img id="photo" src="http://farm${elm.farm}.staticflickr.com/${elm.server}/${elm.id}_${elm.secret}.jpg">`)
+          // photoData.push(`<img src="https://www.flickr.com/photos/${elm.owner}/${elm.id}/">`);
+          console.log(photoData)
         })
 
-        $('#output').append(photoData);
+        $('#output').html(photoData);
 
       }).catch(function(error) {
         console.log(error);
       }).finally(function() {
         console.log('done!');
       });
+    });
+
+    $('.answer_btn').on('click', function() {
+      if($('.answer_box').val() === 'マラウイ') {
+        alert('大正解！ここはマラウイのkuchaweというホテルの写真。');
+      }
+      else if($('.answer_box').val() === 'アフリカ') {
+        alert('惜しい！アフリカのどこだろう？');
+      }
+      else {
+        alert('残念。ハズレだよ〜')
+      }
     });
 
   </script>

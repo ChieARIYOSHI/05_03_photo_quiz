@@ -11,6 +11,14 @@ body {
   font-size: 28px;
 }
 
+#photo {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin: 10px;
+}
+
+
 .main p {
   margin: 20px 0px 0px;
 }
